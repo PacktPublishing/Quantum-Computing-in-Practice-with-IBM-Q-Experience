@@ -2,42 +2,43 @@
 # -*- coding: utf-8 -*-
 """
 Created Nov 2020
-Modified Aug 2021s
+Modified Aug 2021, updated Feb 2025 <-In process
 
 @author: hassi
 """
 
 
-print("Ch 7: IBM Q simulators and how they are used")
-print("--------------------------------------------")
+print("Ch 7: IBM Quantum simulators and how they are used")
+print("--------------------------------------------------")
 
 # Import Qiskit and load account
-from qiskit import Aer, IBMQ
-
-print("Getting provider...")
-if not IBMQ.active_account():
-    IBMQ.load_account()
-provider = IBMQ.get_provider()
+from qiskit import QuantumCircuit, transpile
+from qiskit_aer import Aer, AerSimulator
 
 
-# Load backends
-backends=Aer.backends()
-print("\nAer backends:\n\n",backends)
+#print("Getting provider...")
+#if not IBMQ.active_account():
+#    IBMQ.load_account()
+#provider = IBMQ.get_provider()
+
+backends = AerSimulator().available_methods()
+
+print(backends)
 
 
 # Collect Aer simulators
 simulators=[]
 for sim in range(0,len(backends)):
-    backend = Aer.get_backend(str(backends[sim]))
+    backend = Aer.get_backend(backends[sim])
     simulators.append(backend.configuration())
 
 # Add IBM Q simulator
-ibmq_simulator=provider.backends(simulator=True)
+# ibmq_simulator=provider.backends(simulator=True)
 #simulators.append(provider.get_backend(str(ibmq_simulator[0])).configuration())
     
-for qsim in range(0,len(ibmq_simulator)):
-    backend = provider.get_backend(str(ibmq_simulator[qsim]))
-    simulators.append(backend.configuration())
+#for qsim in range(0,len(ibmq_simulator)):
+#    backend = provider.get_backend(str(ibmq_simulator[qsim]))
+#    simulators.append(backend.configuration())
 
 # Display the raw simulator configuration details
 print("\nSimulator configuration details:")

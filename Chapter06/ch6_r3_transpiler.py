@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created Nov 2020
+Verified March 2023, updated Feb 2025
 
 @author: hassi
 """
@@ -10,20 +11,18 @@ Created Nov 2020
 # coding: utf-8
 
 print("Loading Qiskit...")
-from qiskit import QuantumCircuit, IBMQ
-from qiskit.compiler import transpile
-from qiskit.providers.ibmq import least_busy
+from qiskit import QuantumCircuit
+from qiskit_ibm_runtime import QiskitRuntimeService
+from qiskit.transpiler.preset_passmanagers import generate_preset_pass_manager
 
-from IPython.core.display import display
+#Optional: When running in an iPhyton environment
+from IPython.display import display
 
-# Load account and find an available 5-qubit backend
-print("Getting provider...")
-if not IBMQ.active_account():
-    IBMQ.load_account()
-provider = IBMQ.get_provider()
-
-print("Getting backend...")
-backend = least_busy(provider.backends(n_qubits=5, operational=True, simulator=False))
+# Set service and select backend
+service = QiskitRuntimeService()
+service.backends()
+backend = service.least_busy(operational=True, simulator=False)
+print("Backend: ", backend.name)
 
 # Uncomment to set the backend to a simulator
 #backend = provider.get_backend('ibmq_qasm_simulator')
@@ -80,13 +79,13 @@ def main():
         choice=input("Pick a circuit: \n1. Simple X\n2. Add H\n3. H + Barrier\n4. Controlled-Y\n5. Non-conforming CX\n6. Multi-gate\n")
         qc=build_circuit(choice) 
         # Create the transpiled circuit
-        trans_qc = transpile(qc, backend)
+        trans_qc = generate_preset_pass_manager(backend=backend, optimization_level=3).run(qc)
         
         # Print the original and transpiled circuits
         print("Circuit:")
         display(qc.draw())
         print("Transpiled circuit:")
-        display(trans_qc.draw())
+        display(trans_qc.draw("mpl", idle_wires=False))
         
         # Print the original and transpiled circuit depths
         print("Circuit depth:")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created Nov 2020
+Created Nov 2020, updated Jan 2025
 
 @author: hassi
 """
@@ -23,6 +23,12 @@ print(circ)
 print("\nOpenQASM code")
 print("-------------\n")
 
-circ.qasm(formatted=True, filename="Circuit.qasm")
+from qiskit.qasm2 import dumps
+qasm_str = dumps(circ)
+print(qasm_str)
+
+#Save the QASM string as a .qasm file
+with open("Circuit.qasm", "w") as text_file:
+    print(qasm_str, file=text_file)
 
 

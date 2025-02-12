@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created Nov 2020
+Verified March 2023
 
 @author: hassi
 """
@@ -33,7 +34,7 @@ def main():
         display_circuit(grover,False,False)
         input("Press enter to run the Grover circuit...")
         sim_res=run_grover(oracle_type,grover,get_backend(""))
-        answer=input("Enter 'Y' to run the Grover circuit on an IBMQ backend...")
+        answer=input("Enter 'Y' to run the Grover circuit on an IBM Quantum backend...")
         if answer in ["Y","y"]:
             ibmqbackend=get_backend("IBMQ")
             q_res=run_grover(oracle_type,grover,ibmqbackend)

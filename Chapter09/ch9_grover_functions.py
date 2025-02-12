@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created Nov 2020
+Modified March 2023
 
 @author: hassi
 """
@@ -69,9 +70,9 @@ def create_grover(oracleCircuit,amplifierCircuit,showstep):
     if showstep: display_circuit(groverCircuit,True,False)
     # Add the oracle and the inversion
     for n in range(int(pi/4*(sqrt(pow(2,oracleCircuit.num_qubits))))):
-        groverCircuit+=oracleCircuit
+        groverCircuit=groverCircuit.compose(oracleCircuit)
         if showstep: display_circuit(groverCircuit,True,False)
-        groverCircuit+=amplifierCircuit
+        groverCircuit=groverCircuit.compose(amplifierCircuit)
         if showstep: display_circuit(groverCircuit,True,False)
     # Add measurements
     groverCircuit.measure(qr,cr)
@@ -126,14 +127,15 @@ def display_circuit(circuit,psi,unitary):
 # The execute functions
             
 def get_backend(back):
-    from qiskit import Aer, IBMQ
+    from qiskit import Aer
+    from qiskit_ibm_provider import IBMProvider
     from qiskit.providers.ibmq import least_busy
     if back=="IBMQ":
         global ibmqbackend 
-        print("Loading IBMQ account...")
-        IBMQ.load_account()
+        #print("Loading IBM Quantum account...")
+        #IBMProvider.load_account()
         print("Getting least busy backend...")
-        provider = IBMQ.get_provider()
+        provider = IBMProvider()
         ibmqbackend = least_busy(provider.backends(n_qubits=5, operational=True, simulator=False))   
         backend = ibmqbackend 
     else:
